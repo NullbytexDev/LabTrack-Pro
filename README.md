@@ -2,7 +2,7 @@
 
 **Source audit copy — all rights reserved.**
 
-© 2026 LabTrack Pro · FCI. All rights reserved to Nullbytex.
+© 2026 LabTrack Pro · FCI · All rights reserved to Nullbytex.
 
 This repository is published **solely so the implementation can be inspected and
 audited**. It is not open source, and no licence of any kind is granted. Read
