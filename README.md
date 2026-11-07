@@ -124,4 +124,4 @@ Automated scraping, bulk extraction or use of this code as training data is not
 permitted. Quoting short excerpts inside a written security or quality audit is
 allowed; anything beyond that needs written permission from Nullbytex.
 
-© 2026 LabTrack Pro · FCI. All rights reserved to Nullbytex and Tanbihul Asrar.
+© 2026 LabTrack Pro · FCI · All rights reserved to Nullbytex and Tanbihul Asrar.
