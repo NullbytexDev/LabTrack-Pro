@@ -1,0 +1,489 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* deep navy canvas with teal on the left and amber on the right */
+    --background: 212 65% 8%;          /* #071321 */
+    --foreground: 208 23% 89%;         /* #DCE3E9 */
+    --card: 210 62% 8%;                /* #081522 */
+    --card-foreground: 208 23% 89%;
+    --popover: 209 52% 11%;
+    --popover-foreground: 208 23% 89%;
+    --primary: 175 64% 52%;            /* #35D3C5 */
+    --primary-foreground: 212 65% 8%;
+    --secondary: 210 40% 13%;
+    --secondary-foreground: 208 20% 88%;
+    --muted: 210 32% 14%;
+    --muted-foreground: 212 18% 72%;   /* #AAB6C4 */
+    --accent: 186 40% 16%;
+    --accent-foreground: 175 58% 86%;
+    --destructive: 0 66% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 206 32% 21%;
+    --input: 206 32% 21%;
+    --ring: 175 64% 52%;
+    --radius: 0.9rem;
+
+    --status-available: 150 50% 55%;
+    --status-minor: 42 78% 64%;
+    --status-repair: 0 70% 65%;
+    --status-repaired: 208 86% 72%;
+    --status-revision: 268 66% 75%;
+
+    --ink: 212 58% 7%;
+    --brand: 42 78% 65%;               /* #EBC15F */
+    --brand-teal: 175 64% 52%;         /* #35D3C5 */
+    --brand-mint: 119 36% 74%;         /* #A7D5A6 */
+    --brand-gold: 42 78% 65%;          /* #EBC15F */
+
+    /* the two ambient glows baked into the page background */
+    --glow-teal: 184 84% 15%;          /* #064044 */
+    --glow-amber: 34 29% 15%;          /* #33291C */
+
+    --chart-1: 175 64% 52%;
+    --chart-2: 42 78% 65%;
+    --chart-3: 119 36% 74%;
+    --chart-4: 208 66% 64%;
+    --chart-5: 0 66% 64%;
+
+    --font-heading: "Sora", ui-sans-serif, system-ui, sans-serif;
+    --font-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    --sidebar-background: 212 58% 6%;
+    --sidebar-foreground: 208 20% 86%;
+    --sidebar-primary: 175 64% 52%;
+    --sidebar-primary-foreground: 212 65% 8%;
+    --sidebar-accent: 210 34% 13%;
+    --sidebar-accent-foreground: 208 23% 89%;
+    --sidebar-border: 206 32% 20%;
+    --sidebar-ring: 175 64% 52%;
+  }
+
+  .dark {
+    --background: 212 65% 8%;
+    --foreground: 208 23% 89%;
+    --card: 210 62% 8%;
+    --card-foreground: 208 23% 89%;
+    --popover: 209 52% 11%;
+    --popover-foreground: 208 23% 89%;
+    --primary: 175 64% 52%;
+    --primary-foreground: 212 65% 8%;
+    --secondary: 210 40% 13%;
+    --secondary-foreground: 208 20% 88%;
+    --muted: 210 32% 14%;
+    --muted-foreground: 212 18% 72%;
+    --accent: 186 40% 16%;
+    --accent-foreground: 175 58% 86%;
+    --destructive: 0 66% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 206 32% 21%;
+    --input: 206 32% 21%;
+    --ring: 175 64% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    background-image:
+      radial-gradient(58rem 44rem at -4% -10%, hsl(var(--glow-teal) / 0.75), transparent 62%),
+      radial-gradient(54rem 40rem at 104% 0%, hsl(var(--glow-amber) / 0.8), transparent 64%),
+      radial-gradient(50rem 34rem at 50% 110%, hsl(188 55% 13% / 0.45), transparent 72%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-heading tracking-tight text-foreground;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.26);
+    color: hsl(var(--foreground));
+  }
+}
+
+@layer components {
+  .surface {
+    @apply rounded-3xl border border-border/80 bg-card/80 backdrop-blur-md;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5), 0 24px 50px -36px rgba(0, 0, 0, 0.95);
+  }
+
+  .surface-lift {
+    transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 320ms ease, border-color 320ms ease;
+  }
+
+  .surface-lift:hover,
+  .surface-lift:focus-visible {
+    transform: translateY(-4px);
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.55), 0 32px 60px -30px hsl(var(--primary) / 0.32);
+    border-color: hsl(var(--primary) / 0.4);
+  }
+
+  /* every panel glows softly under the pointer, everywhere in the app */
+  .surface {
+    transition:
+      border-color 320ms ease,
+      box-shadow 320ms ease;
+  }
+
+  .surface:hover {
+    border-color: hsl(var(--primary) / 0.38);
+    box-shadow:
+      0 0 0 1px hsl(var(--primary) / 0.16),
+      0 0 30px -14px hsl(var(--primary) / 0.55),
+      0 26px 52px -36px rgba(0, 0, 0, 0.95);
+  }
+
+  .ink-panel {
+    background: linear-gradient(155deg, hsl(210 62% 8%) 0%, hsl(203 48% 12%) 52%, hsl(212 62% 6%) 100%);
+    color: hsl(208 24% 94%);
+    border: 1px solid hsl(var(--primary) / 0.18);
+  }
+
+  .gradient-text {
+    background-image: linear-gradient(100deg, hsl(var(--brand-teal)) 0%, hsl(var(--brand-mint)) 46%, hsl(var(--brand-gold)) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .glass-chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-medium backdrop-blur-sm;
+  }
+
+  .mono-id {
+    @apply font-mono text-[0.95em] tracking-tight;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* --- page textures: teal and amber light on deep navy --- */
+  .tex-mesh {
+    background-image:
+      radial-gradient(52rem 34rem at 12% -8%, hsl(184 74% 26% / 0.42), transparent 62%),
+      radial-gradient(40rem 30rem at 92% 4%, hsl(36 42% 30% / 0.38), transparent 64%),
+      radial-gradient(36rem 26rem at 55% 108%, hsl(175 60% 42% / 0.14), transparent 66%);
+  }
+
+  .tex-dots {
+    background-image:
+      radial-gradient(hsl(175 62% 62% / 0.18) 1px, transparent 1.2px),
+      radial-gradient(44rem 30rem at 88% -6%, hsl(36 42% 30% / 0.38), transparent 66%);
+    background-size: 20px 20px, 100% 100%;
+  }
+
+  .tex-blueprint {
+    background-image:
+      linear-gradient(to right, hsl(175 58% 55% / 0.13) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(175 58% 55% / 0.13) 1px, transparent 1px),
+      linear-gradient(to right, hsl(184 50% 30% / 0.16) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(184 50% 30% / 0.16) 1px, transparent 1px),
+      radial-gradient(44rem 30rem at 10% 0%, hsl(184 70% 24% / 0.5), transparent 64%);
+    background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px, 100% 100%;
+  }
+
+  .tex-scan {
+    background-image:
+      repeating-linear-gradient(to bottom, hsl(175 60% 58% / 0.09) 0px, hsl(175 60% 58% / 0.09) 1px, transparent 1px, transparent 7px),
+      linear-gradient(105deg, transparent 40%, hsl(42 70% 62% / 0.10) 50%, transparent 60%),
+      radial-gradient(40rem 26rem at 6% 0%, hsl(34 34% 22% / 0.55), transparent 62%);
+  }
+
+  .tex-rings {
+    background-image:
+      repeating-radial-gradient(circle at 88% 10%, hsl(175 64% 55% / 0.13) 0px, hsl(175 64% 55% / 0.13) 1px, transparent 1px, transparent 44px),
+      radial-gradient(34rem 24rem at 0% 100%, hsl(184 68% 22% / 0.45), transparent 62%);
+  }
+
+  .tex-stripes {
+    background-image:
+      repeating-linear-gradient(135deg, hsl(175 58% 55% / 0.09) 0px, hsl(175 58% 55% / 0.09) 1px, transparent 1px, transparent 13px),
+      radial-gradient(38rem 26rem at 100% 0%, hsl(36 40% 28% / 0.45), transparent 64%);
+  }
+
+  .tex-blobs {
+    background-image:
+      radial-gradient(30rem 24rem at 14% 6%, hsl(184 72% 24% / 0.55), transparent 62%),
+      radial-gradient(26rem 22rem at 86% 20%, hsl(36 40% 28% / 0.48), transparent 62%),
+      radial-gradient(28rem 20rem at 48% 98%, hsl(175 55% 36% / 0.16), transparent 64%);
+  }
+
+  .tex-grid {
+    background-image:
+      linear-gradient(to right, hsl(175 55% 52% / 0.10) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(175 55% 52% / 0.10) 1px, transparent 1px),
+      radial-gradient(40rem 28rem at 78% 8%, hsl(36 42% 30% / 0.42), transparent 62%);
+    background-size: 36px 36px, 36px 36px, 100% 100%;
+  }
+
+  .tex-aurora {
+    background-image:
+      linear-gradient(115deg, transparent 28%, hsl(175 64% 52% / 0.12) 46%, hsl(119 36% 74% / 0.09) 58%, transparent 74%),
+      radial-gradient(46rem 30rem at 50% -12%, hsl(184 68% 24% / 0.5), transparent 66%),
+      repeating-linear-gradient(90deg, hsl(42 62% 62% / 0.05) 0px, hsl(42 62% 62% / 0.05) 1px, transparent 1px, transparent 58px);
+  }
+
+  .hairline {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-border to-transparent;
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 0 1px hsl(var(--primary) / 0.32), 0 14px 44px -14px hsl(var(--primary) / 0.5);
+  }
+
+  /* Active page underline: soft colours that drift along the line, no glow. */
+  .nav-flow-line {
+    background-image: linear-gradient(
+      90deg,
+      hsl(var(--brand-teal)) 0%,
+      hsl(var(--brand-mint)) 25%,
+      hsl(var(--brand-gold)) 50%,
+      hsl(var(--brand-mint)) 75%,
+      hsl(var(--brand-teal)) 100%
+    );
+    background-size: 260% 100%;
+    background-position: 0% 50%;
+    animation: nav-flow 9s ease-in-out infinite;
+  }
+
+  /* hover + click glow used on boxes across every page */
+  .glow-hover {
+    transition:
+      transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 300ms ease,
+      border-color 300ms ease,
+      background-color 300ms ease;
+  }
+
+  .glow-hover:hover,
+  .glow-hover:focus-visible {
+    transform: translateY(-3px);
+    border-color: hsl(var(--primary) / 0.45);
+    box-shadow:
+      0 0 0 1px hsl(var(--primary) / 0.22),
+      0 0 26px -10px hsl(var(--primary) / 0.55),
+      0 26px 50px -32px rgba(0, 0, 0, 0.9);
+  }
+
+  .glow-hover:active {
+    transform: translateY(-1px) scale(0.994);
+    box-shadow:
+      0 0 0 1px hsl(var(--primary) / 0.55),
+      0 0 34px -4px hsl(var(--primary) / 0.65);
+  }
+
+  .glow-hover:active::after {
+    opacity: 1;
+  }
+
+  /* very slow drift on page textures — transform only, so it stays cheap to paint */
+  .page-texture-anim {
+    animation: texture-drift 38s ease-in-out infinite alternate;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .page-enter {
+    animation: page-enter 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .fade-in {
+    animation: fade-in 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .fade-in-soft {
+    animation: fade-in 760ms ease both;
+  }
+
+  .animate-glow-pulse {
+    animation: glow-pulse 4.5s ease-in-out infinite;
+  }
+}
+
+/* Never fade a complete route to zero: content and the shell stay visible. */
+@keyframes page-enter {
+  from { transform: translateY(6px); }
+  to { transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nav-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes texture-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-1.6%, 2%, 0) scale(1.04);
+  }
+}
+
+/* LabTrack Pro Assistant — thinking indicator */
+@keyframes assistant-halo {
+  0%, 100% { opacity: 0.22; transform: scale(0.88); }
+  50% { opacity: 0.6; transform: scale(1.22); }
+}
+
+@keyframes assistant-dot {
+  0%, 80%, 100% { opacity: 0.28; transform: translateY(0) scale(0.85); }
+  40% { opacity: 1; transform: translateY(-2px) scale(1); }
+}
+
+@keyframes assistant-scan {
+  0% { transform: translateX(-130%); }
+  100% { transform: translateX(330%); }
+}
+
+@keyframes assistant-shimmer {
+  0% { background-position: 180% 50%; }
+  100% { background-position: -80% 50%; }
+}
+
+.assistant-halo {
+  animation: assistant-halo 2.4s ease-in-out infinite;
+}
+
+.assistant-dot {
+  animation: assistant-dot 1.25s ease-in-out infinite;
+}
+
+.assistant-scan {
+  animation: assistant-scan 1.9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.assistant-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    hsl(var(--muted-foreground)) 18%,
+    hsl(var(--foreground)) 42%,
+    hsl(var(--primary)) 58%,
+    hsl(var(--muted-foreground)) 82%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: assistant-shimmer 2.8s linear infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.72;
+    transform: scale(1.06);
+  }
+}
+
+/* Material Design feedback for the assistant's copy / rate actions */
+@keyframes md-ripple {
+  from {
+    transform: scale(0);
+    opacity: 0.28;
+  }
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes icon-pop {
+  0% {
+    transform: scale(0.74);
+    opacity: 0.55;
+  }
+  60% {
+    transform: scale(1.14);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.md-ripple {
+  animation: md-ripple 440ms cubic-bezier(0.2, 0, 0, 1) forwards;
+}
+
+.md-icon-pop {
+  animation: icon-pop 220ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Glow ring shared by tiles, cards and buttons */
+.glow-target {
+  position: relative;
+  isolation: isolate;
+}
+
+.glow-target::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 260ms ease;
+  background: radial-gradient(120% 120% at 50% 0%, hsl(var(--primary) / 0.16), transparent 70%);
+  z-index: -1;
+}
+
+.glow-target:hover::after,
+.glow-target:focus-visible::after,
+.glow-target[data-active="true"]::after {
+  opacity: 1;
+}
