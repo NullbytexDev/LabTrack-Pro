@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '@/api/client';
+import { entities } from '@/api/entities';
 import useProfile from '@/hooks/useProfile';
 import PageTexture from '@/components/common/PageTexture';
 import Reveal from '@/components/common/Reveal';
@@ -29,8 +29,8 @@ export default function Labs() {
   useEffect(() => {
     let alive = true;
     (async () => {
-      const labPage = await api.entities.Lab.filter({ status: 'active' }, { sort: 'name', limit: 100 });
-      const grouped = await api.entities.PC.aggregate({ query: { lifecycle: 'active' }, groupBy: ['lab_id', 'status'] });
+      const labPage = await entities.Lab.filter({ status: 'active' }, { sort: 'name', limit: 100 });
+      const grouped = await entities.PC.aggregate({ query: { lifecycle: 'active' }, groupBy: ['lab_id', 'status'] });
       if (grouped.truncated) throw new Error('Lab totals exceed the supported summary size.');
       if (!alive) return;
       setLabs(labPage.items);

@@ -1,7 +1,7 @@
 // Sign in / register for students, lab assistants and instructors
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import { useAuth } from '@/lib/AuthContext';
 import AuthSidePanel from '@/components/auth/AuthSidePanel';
 import CopyrightNotice from '@/components/layout/CopyrightNotice';
@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { safeReturnTo } from '@/lib/authReturnTo';
 import PasswordInput from '@/components/account/PasswordInput';
+import SliderCaptchaField from '@/components/auth/SliderCaptchaField';
 import PasswordStrength from '@/components/account/PasswordStrength';
 import { startSignInSession } from '@/components/auth/sessionState';
 import { loginWithMfa, continueMfa } from '@/lib/authMfa';
@@ -57,6 +58,12 @@ export default function SignIn() {
   const [form, setForm] = useState(EMPTY);
   const [code, setCode] = useState('');
   const [login, setLogin] = useState({ email: '', password: '' });
+  const [captchaPass, setCaptchaPass] = useState('');
+  const [captchaRound, setCaptchaRound] = useState(0);
+  const [loginCaptchaPass, setLoginCaptchaPass] = useState('');
+  const [loginCaptchaRound, setLoginCaptchaRound] = useState(0);
+  const [codeCaptchaPass, setCodeCaptchaPass] = useState('');
+  const [codeCaptchaRound, setCodeCaptchaRound] = useState(0);
 
   // Live checks while typing — the message disappears as soon as the entry is valid.
   const loginEmailInvalid = checkEmail(login.email).state === 'invalid';
@@ -123,14 +130,29 @@ export default function SignIn() {
       setError(problem);
       return;
     }
+    if (!captchaPass) {
+      setError('Complete the “Verify you’re not a bot” check, then submit again.');
+      return;
+    }
 
     setLoading(true);
     try {
+      // The access key is checked on the server before anything is created, so a
+      // wrong key never reaches the point where a verification code is emailed.
+      await api.functions.invoke('accessKeyCheck', {
+        role,
+        email: form.email.trim().toLowerCase(),
+        access_code: form.access_code.trim(),
+        captcha_pass: captchaPass,
+      });
       await api.auth.register({ email: form.email.trim().toLowerCase(), password: form.password });
       setStep('code');
       setNotice(`Verification code sent to ${form.email.trim()}.`);
     } catch (err) {
       setError(readError(err, 'We could not start the registration. Try again.'));
+      // The server spends the pass on every attempt, so ask for a fresh check.
+      setCaptchaPass('');
+      setCaptchaRound((round) => round + 1);
     } finally {
       setLoading(false);
     }
@@ -159,6 +181,11 @@ export default function SignIn() {
 
   const handleResend = async () => {
     setError('');
+    // Another code is another email, so it costs a fresh solved check.
+    if (!codeCaptchaPass) {
+      setError('Complete the “Verify you’re not a bot” check before requesting another code.');
+      return;
+    }
     setResending(true);
     try {
       await api.auth.resendOtp(form.email.trim().toLowerCase());
@@ -167,6 +194,8 @@ export default function SignIn() {
       setError(readError(err, 'We could not resend the code yet. Wait a moment and try again.'));
     } finally {
       setResending(false);
+      setCodeCaptchaPass('');
+      setCodeCaptchaRound((round) => round + 1);
     }
   };
 
@@ -181,14 +210,28 @@ export default function SignIn() {
       setError('Enter your password.');
       return;
     }
+    if (!loginCaptchaPass) {
+      setError('Complete the “Verify you’re not a bot” check, then try again.');
+      return;
+    }
     setLoading(true);
     try {
+      // The pass is spent here, so every sign-in attempt needs a fresh check.
+      const check = await api.functions.invoke('captchaChallenge', {
+        action: 'consume',
+        pass: loginCaptchaPass,
+        email: login.email.trim().toLowerCase(),
+      });
+      if (!check?.data?.ok) throw new Error(check?.data?.error || 'Complete the bot check again.');
+
       const result = await loginWithMfa(login.email.trim().toLowerCase(), login.password);
       if (result?.mfa_required) { await continueMfa(result, returnTo); return; }
       startSignInSession();
       window.location.href = returnTo || '/';
     } catch (err) {
       setError(readError(err, 'That email and password did not match an account.'));
+      setLoginCaptchaPass('');
+      setLoginCaptchaRound((round) => round + 1);
     } finally {
       setLoading(false);
     }
@@ -308,6 +351,13 @@ export default function SignIn() {
                   )}
                   {login.password && <PasswordStrength value={login.password} />}
                 </div>
+                <SliderCaptchaField
+                  key={`login-${loginCaptchaRound}`}
+                  disabled={loading}
+                  email={login.email.trim().toLowerCase()}
+                  onVerified={setLoginCaptchaPass}
+                  onReset={() => setLoginCaptchaPass('')}
+                />
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? (
                     <>
@@ -334,11 +384,28 @@ export default function SignIn() {
                 onBack={() => setStep('details')}
                 loading={loading}
                 resending={resending}
+                captcha={
+                  <SliderCaptchaField
+                    key={`resend-${codeCaptchaRound}`}
+                    disabled={resending}
+                    email={form.email.trim().toLowerCase()}
+                    onVerified={setCodeCaptchaPass}
+                    onReset={() => setCodeCaptchaPass('')}
+                  />
+                }
               />
             ) : (
               <form onSubmit={handleSendCode}>
                 <RegisterFields role={role} form={form} onChange={updateField} disabled={loading} />
-                {form.password && <PasswordStrength value={form.password} />}
+                <div className="mt-6">
+                  <SliderCaptchaField
+                    key={captchaRound}
+                    disabled={loading}
+                    email={form.email.trim().toLowerCase()}
+                    onVerified={setCaptchaPass}
+                    onReset={() => setCaptchaPass('')}
+                  />
+                </div>
                 <Button type="submit" className="mt-6 w-full" disabled={loading}>
                   {loading ? (
                     <>

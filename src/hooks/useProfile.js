@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { api } from '@/api/client';
+import { entities } from '@/api/entities';
 import { useAuth } from '@/lib/AuthContext';
 import { storeTrackingOptOut } from '@/lib/trackingPreference';
 
@@ -12,7 +12,7 @@ export default function useProfile() {
     queryKey: ['profile', user?.id],
     enabled: Boolean(user?.id),
     queryFn: async () => {
-      const page = await api.entities.Profile.filter({ user_id: user.id }, { limit: 1 });
+      const page = await entities.Profile.filter({ user_id: user.id }, { limit: 1 });
       return page.items[0] || null;
     },
     staleTime: 60000,

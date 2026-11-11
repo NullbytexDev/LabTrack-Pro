@@ -3,17 +3,21 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "LabTrack Pro — a lab management interface for FCI computer labs: live PC status, issue reporting, repair history and instructor tools.",
-  "license": "UNLICENSED (All rights reserved)",
   "engines": {
-    "node": ">=20"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
     "lint": "eslint . --quiet",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc -p ./jsconfig.json",
+    "preview": "vite preview"
+  },
+  "overrides": {
+    "dompurify": "3.4.17",
+    "follow-redirects": "1.16.2",
+    "postcss-selector-parser": "6.1.5"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^17.0.0",
@@ -100,9 +104,5 @@
     "typescript": "^5.8.2",
     "vite": "^8.2.0"
   },
-  "overrides": {
-    "dompurify": "3.4.17",
-    "follow-redirects": "1.16.2",
-    "postcss-selector-parser": "6.1.5"
-  }
+  "license": "UNLICENSED"
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { api } from "@/api/client";
+import { api } from "@/api/apiClient";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -142,10 +142,11 @@ export default function Register() {
           )}
         </Button>
         <p className="text-center text-sm text-muted-foreground mt-4">
-          Didn't receive the code?{" "}
+          The code is valid for 10 minutes. If it has not arrived, check your spam or promotions folder, then{" "}
           <button onClick={handleResend} className="text-primary font-medium hover:underline">
-            Resend
+            resend
           </button>
+          .
         </p>
       </AuthLayout>
     );

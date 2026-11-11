@@ -11,7 +11,7 @@ export default function AvatarPicker({ role, value, onChange, compact = false })
     <fieldset>
       <legend className="text-sm font-medium">Choose your profile picture</legend>
       <p className="mt-1 text-xs text-muted-foreground">
-        Twelve original illustrations for your role. The one you pick appears wherever you are shown in LabTrack Pro.
+        Original illustrations for your role. The one you pick appears wherever you are shown in LabTrack Pro.
       </p>
       <div className={`mt-3 grid grid-cols-4 gap-2 ${compact ? '' : 'sm:grid-cols-6'}`}>
         {options.map((option) => {

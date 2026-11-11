@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import { toast } from '@/components/ui/use-toast';
 
 export const MOVE_KEY = 'labtrack-account-move';

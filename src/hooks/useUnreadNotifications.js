@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import { useAuth } from '@/lib/AuthContext';
 
 /** Number of unread notifications for the signed-in member. */

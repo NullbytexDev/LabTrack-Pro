@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import UsageSwitch from '@/components/account/UsageSwitch';
 import { setTrackingPreference } from '@/lib/tracking';
 import { ShieldHalf, Loader2 } from 'lucide-react';

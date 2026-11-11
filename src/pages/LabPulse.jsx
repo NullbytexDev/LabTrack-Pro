@@ -1,7 +1,7 @@
 // Lab Pulse — live readiness across every FCI lab
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { api } from '@/api/client';
+import { entities } from '@/api/entities';
 import useProfile from '@/hooks/useProfile';
 import PageTexture from '@/components/common/PageTexture';
 import PageLoader from '@/components/common/PageLoader';
@@ -37,9 +37,9 @@ export default function LabPulse() {
 
   const load = useCallback(async () => {
     const [labPage, pcPage, grouped] = await Promise.all([
-      api.entities.Lab.filter({ status: 'active' }, { sort: 'name', limit: 100 }),
-      api.entities.PC.filter({ lifecycle: 'active' }, { limit: 500, fields: ['id', 'identifier', 'lab_id'] }),
-      api.entities.PC.aggregate({ query: { lifecycle: 'active' }, groupBy: ['lab_id', 'status'] }),
+      entities.Lab.filter({ status: 'active' }, { sort: 'name', limit: 100 }),
+      entities.PC.filter({ lifecycle: 'active' }, { limit: 500, fields: ['id', 'identifier', 'lab_id'] }),
+      entities.PC.aggregate({ query: { lifecycle: 'active' }, groupBy: ['lab_id', 'status'] }),
     ]);
     if (grouped.truncated) throw new Error('Lab totals exceed the supported summary size.');
     setLabs(labPage.items);
@@ -66,7 +66,7 @@ export default function LabPulse() {
   useEffect(() => {
     if (!isInstructor) return undefined;
     let alive = true;
-    api.entities.IssueReport.filter({}, { sort: '-created_date', limit: 200 })
+    entities.IssueReport.filter({}, { sort: '-created_date', limit: 200 })
       .then((page) => {
         if (alive) setReports(page.items);
       })

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
 import { REF_FIELD } from '@/components/auth/RegisterFields';

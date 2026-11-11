@@ -1,6 +1,6 @@
 // Notifications — role-aware: instructor report inbox, and member report updates
 import React, { useCallback, useEffect, useState } from 'react';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import PageTexture from '@/components/common/PageTexture';
 import PageLoader from '@/components/common/PageLoader';
 import SignInRequired from '@/components/common/SignInRequired';

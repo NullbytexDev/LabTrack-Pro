@@ -1,4 +1,4 @@
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 
 const SESSION_KEY = 'labtrack-session-id';
 let pendingRecord = null;

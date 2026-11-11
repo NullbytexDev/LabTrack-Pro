@@ -1,4 +1,4 @@
-// About — what LabTrack Pro is, what it does, and that it is open source
+// About — what LabTrack Pro is, what it does, and that its source is published for audit only
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PageTexture from '@/components/common/PageTexture';
@@ -78,7 +78,7 @@ export default function About() {
             Computer labs fail in small ways: a dead monitor, a machine that will not boot, a keyboard that only half
             works. Individually they are minor. Together, and undocumented, they quietly erode teaching time. LabTrack Pro
             makes those small failures visible, assignable, and — most importantly — remembered. It is the lab workspace
-            for the FCI computer labs, and it is open source.
+            for the FCI computer labs. Its frontend source code is publicly available for viewing and auditing.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             <Button asChild>
@@ -154,25 +154,26 @@ export default function About() {
         </section>
 
         <section
-          aria-labelledby="open-source"
+          aria-labelledby="source-availability"
           className="ink-panel relative mt-10 overflow-hidden rounded-[28px] px-6 py-10 sm:px-10"
         >
           <div aria-hidden="true" className="tex-grid pointer-events-none absolute inset-0 opacity-25" />
           <div className="relative">
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/35 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
-              <GitFork className="h-3.5 w-3.5" aria-hidden="true" /> Open source
+              <GitFork className="h-3.5 w-3.5" aria-hidden="true" /> For audit and review
             </span>
-            <h2 id="open-source" className="mt-4 max-w-2xl font-heading text-2xl font-semibold text-white sm:text-3xl">
-              LabTrack Pro is open source — published for audit and review.
+            <h2 id="source-availability" className="mt-4 max-w-2xl font-heading text-2xl font-semibold text-white sm:text-3xl">
+              LabTrack Pro&rsquo;s frontend source code is publicly available for viewing and auditing.
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/70">
-              Every screen you are using is public code. The whole application — the lab inventory, the reporting flow,
-              the notifications, the inbox, the account security — lives in a GitHub repository you can read. Nothing is
-              hidden behind a black box: anyone can verify what the app really does with lab data.
+              Every screen you are using can be read in a public GitHub repository — the lab inventory, the reporting
+              flow, the notifications, the inbox, the account security. Nothing is hidden behind a black box: anyone can
+              verify what the app really does with lab data.
             </p>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/70">
-              The repository is provided solely for auditing and reviewing the code — not for making improvements,
-              testing, or other purposes. If you find any issues, you can report them on GitHub.
+              LabTrack Pro is not open source. The repository exists for auditing purposes only: the code may not be
+              modified, copied or redistributed, and no licence is granted for reuse. If you find an issue, you can
+              report it on GitHub.
             </p>
             <div className="mt-6">
               <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">

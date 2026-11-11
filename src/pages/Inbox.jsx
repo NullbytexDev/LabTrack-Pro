@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import { useAuth } from '@/lib/AuthContext';
 import PageTexture from '@/components/common/PageTexture';
 import MessageList from '@/components/inbox/MessageList';

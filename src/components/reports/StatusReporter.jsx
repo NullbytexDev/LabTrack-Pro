@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
+import { entities } from '@/api/entities';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
@@ -21,7 +22,7 @@ export default function StatusReporter({ labs, onSaved }) {
     setPcs(null);
     setPcId('');
     if (!labId) return () => { alive = false; };
-    api.entities.PC
+    entities.PC
       .filter({ lab_id: labId, lifecycle: 'active' }, { sort: 'identifier', limit: 200 })
       .then((page) => {
         if (alive) setPcs(page.items);

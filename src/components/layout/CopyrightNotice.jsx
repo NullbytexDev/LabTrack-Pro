@@ -13,7 +13,7 @@ export default function CopyrightNotice({ className = '' }) {
       </p>
       <div className="hairline my-2" aria-hidden="true" />
       <p className="font-bold uppercase tracking-[0.12em] text-foreground/60">
-        © 2026 LabTrack Pro · FCI · All rights reserved
+        © 2026 LabTrack Pro · FCI · All rights reserved.
       </p>
     </div>
   );

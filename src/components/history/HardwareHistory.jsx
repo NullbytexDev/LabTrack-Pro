@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
+import { entities } from '@/api/entities';
 import HistoryRow from '@/components/history/HardwareEventRow';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -26,7 +27,7 @@ export default function HardwareHistory() {
 
   useEffect(() => {
     let alive = true;
-    api.entities.Lab.filter({}, { sort: 'name', limit: 100 })
+    entities.Lab.filter({}, { sort: 'name', limit: 100 })
       .then((page) => {
         if (alive) setLabs(page.items);
       })

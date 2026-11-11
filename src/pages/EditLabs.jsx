@@ -4,7 +4,8 @@ import BulkEditToolbar from '@/components/edit/BulkEditToolbar';
 import BulkEditDialog from '@/components/edit/BulkEditDialog';
 import BulkAddDialog from '@/components/edit/BulkAddDialog';
 import { Checkbox } from '@/components/ui/checkbox';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
+import { entities } from '@/api/entities';
 import useProfile from '@/hooks/useProfile';
 import PageTexture from '@/components/common/PageTexture';
 import PageLoader from '@/components/common/PageLoader';
@@ -52,7 +53,7 @@ export default function EditLabs() {
   activeLab.current = selectedId;
 
   const loadLabs = useCallback(async () => {
-    const page = await api.entities.Lab.filter({}, { sort: 'name', limit: 100 });
+    const page = await entities.Lab.filter({}, { sort: 'name', limit: 100 });
     setLabs(page.items);
     setSelectedId((current) => {
       if (current && page.items.some((lab) => lab.id === current)) return current;
@@ -62,7 +63,7 @@ export default function EditLabs() {
 
   const loadPcs = useCallback(async (labId, cursor = null) => {
     if (!labId) { setPcs([]); setPcNext(null); return; }
-    const page = await api.entities.PC.filter({ lab_id: labId }, { sort: 'identifier', limit: 50, ...(cursor ? { cursor } : {}) });
+    const page = await entities.PC.filter({ lab_id: labId }, { sort: 'identifier', limit: 50, ...(cursor ? { cursor } : {}) });
     if (activeLab.current !== labId) return;
     setPcs((current) => cursor ? [...(current || []), ...page.items] : page.items);
     setPcNext(page.has_more ? page.next_cursor : null);

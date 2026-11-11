@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Check, Copy, ThumbsDown, ThumbsUp } from 'lucide-react';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import MaterialIconButton from '@/components/ai/MaterialIconButton';
 import AssistantProse from '@/components/ai/AssistantProse';
 

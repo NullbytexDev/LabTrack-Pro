@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { api } from '@/api/client';
+import { entities } from '@/api/entities';
 import { useAuth } from '@/lib/AuthContext';
 import useProfile from '@/hooks/useProfile';
 import PageTexture from '@/components/common/PageTexture';
@@ -10,7 +10,7 @@ import EmptyState from '@/components/common/EmptyState';
 import LabIllustration from '@/components/common/LabIllustration';
 import LabSnapshotArt from '@/components/overview/LabSnapshotArt';
 import { Button } from '@/components/ui/button';
-import { Monitor, MonitorCheck, Wrench, Building2, ArrowRight, ClipboardList, History as HistoryIcon, ShieldCheck } from 'lucide-react';
+import { Monitor, MonitorCheck, Wrench, Building2, ArrowRight, ClipboardList, History as HistoryIcon, ShieldCheck, AlertTriangle, RotateCcw, BadgeCheck } from 'lucide-react';
 
 const STEPS = [
   {
@@ -41,13 +41,16 @@ export default function Overview() {
     let alive = true;
     const load = async () => {
       try {
-        const [labs, total, available, attention] = await Promise.all([
-          api.entities.Lab.count({ status: 'active' }),
-          api.entities.PC.count({ lifecycle: 'active' }),
-          api.entities.PC.count({ lifecycle: 'active', status: 'available' }),
-          api.entities.PC.count({ lifecycle: 'active', status: { $in: ['minor_issue', 'need_repair', 'revision_pending'] } }),
+        const [labs, total, available, attention, minor, revisions, repaired] = await Promise.all([
+          entities.Lab.count({ status: 'active' }),
+          entities.PC.count({ lifecycle: 'active' }),
+          entities.PC.count({ lifecycle: 'active', status: 'available' }),
+          entities.PC.count({ lifecycle: 'active', status: { $in: ['minor_issue', 'need_repair', 'revision_pending'] } }),
+          entities.PC.count({ lifecycle: 'active', status: 'minor_issue' }),
+          entities.PC.count({ lifecycle: 'active', status: 'revision_pending' }),
+          entities.PC.count({ lifecycle: 'active', status: 'repaired' }),
         ]);
-        if (alive) setMetrics({ labs, total, available, attention });
+        if (alive) setMetrics({ labs, total, available, attention, minor, revisions, repaired });
       } catch {
         if (alive) {
           setMetrics(null);
@@ -107,6 +110,10 @@ export default function Overview() {
                 <ShieldCheck className="h-3.5 w-3.5 text-status-available" aria-hidden="true" />
                 Reporting needs a verified student, lab assistant or instructor account.
               </p>
+              <p className="mt-2 max-w-xl text-xs leading-relaxed text-muted-foreground">
+                The frontend source code is published for auditing purposes only. LabTrack Pro is not open source: the
+                code may not be modified, copied or redistributed.
+              </p>
             </Reveal>
           </div>
 
@@ -129,6 +136,27 @@ export default function Overview() {
             value={metrics ? metrics.attention : '—'}
             hint="Minor issues and repairs"
             tone="text-status-repair"
+          />
+          <StatCard
+            icon={AlertTriangle}
+            label="Minor issue"
+            value={metrics ? metrics.minor : '—'}
+            hint="Usable, with a small fault"
+            tone="text-status-minor"
+          />
+          <StatCard
+            icon={RotateCcw}
+            label="Revision"
+            value={metrics ? metrics.revisions : '—'}
+            hint="Fault returned after a repair"
+            tone="text-status-revision"
+          />
+          <StatCard
+            icon={BadgeCheck}
+            label="Repaired"
+            value={metrics ? metrics.repaired : '—'}
+            hint="Fixed, ready to hand back"
+            tone="text-status-repaired"
           />
         </div>
         {failed && <p className="mt-3 text-xs text-destructive">Live lab totals could not be loaded. Refresh the page to try again.</p>}

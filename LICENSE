@@ -1,13 +1,18 @@
-Copyright © 2026 LabTrack Pro · FCI.
-All rights reserved to Nullbytex and Tanbihul Asrar.
+Copyright (c) 2026 Nullbytex. All rights reserved.
 
-This source code is published for inspection and auditing only.
+PROPRIETARY AND CONFIDENTIAL - NO LICENCE IS GRANTED.
 
-No licence, express or implied, is granted to any person or organisation.
-Permission is NOT given to copy, reproduce, republish, redistribute, clone,
-mirror, modify, translate, sublicense or create derivative works from these
-files, nor to reuse the interface, design, artwork or wording in any other
-product, template or client project.
+This source tree is published strictly for inspection and review. No permission
+or licence, express or implied, is granted to any person to copy, modify, merge,
+publish, share, host, deploy, sell or create derivative works from any part of
+it.
 
-Any use beyond private, read-only review requires prior written permission
-from the copyright holder.
+No open-source licence applies to this project, and the absence of a permissive
+licence file is intentional. Nothing here may be read as an offer of rights
+under any open-source or copyleft terms.
+
+Any use beyond reading and reviewing the code requires the prior written
+permission of the copyright holder. All rights not expressly granted are
+reserved.
+
+Concepts and development: Nullbytex and Tanbihul Asrar.

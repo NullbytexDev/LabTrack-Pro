@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import { useAuth } from '@/lib/AuthContext';
 import useProfile from '@/hooks/useProfile';
 import PageLoader from '@/components/common/PageLoader';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import BulkEditFrame from '@/components/edit/BulkEditFrame';
 import BulkEditReview from '@/components/edit/BulkEditReview';
 import { EMPTY_CONFIG } from '@/components/edit/PcConfigFields';

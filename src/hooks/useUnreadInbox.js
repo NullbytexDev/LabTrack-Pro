@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import { useAuth } from '@/lib/AuthContext';
 
 /** Number of unread messages waiting in the signed-in member's inbox. */
@@ -35,13 +35,6 @@ export default function useUnreadInbox() {
       window.clearInterval(timer);
     };
   }, [load]);
-
-  // A message that arrives or is read elsewhere updates the badge immediately.
-  useEffect(() => {
-    if (!user?.id) return undefined;
-    const unsubscribe = api.entities.Message.subscribe(() => load());
-    return () => unsubscribe?.();
-  }, [user?.id, load]);
 
   return unread;
 }

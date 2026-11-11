@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import useProfile from '@/hooks/useProfile';
 import { setTrackingPreference } from '@/lib/tracking';
 import { Activity, Loader2 } from 'lucide-react';

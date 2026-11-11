@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { MailCheck, Loader2, ArrowLeft } from 'lucide-react';
 
-export default function VerifyCodeStep({ email, code, onCodeChange, onVerify, onResend, onBack, loading, resending }) {
+export default function VerifyCodeStep({ email, code, onCodeChange, onVerify, onResend, onBack, loading, resending, captcha }) {
   return (
     <div className="space-y-5">
       <div className="flex items-start gap-3 rounded-2xl border border-primary/25 bg-primary/[0.06] p-4">
@@ -11,8 +11,9 @@ export default function VerifyCodeStep({ email, code, onCodeChange, onVerify, on
         <div>
           <p className="text-sm font-medium">Verify your email</p>
           <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-            Enter the six-digit code we emailed to <span className="font-medium text-foreground">{email}</span>. Codes
-            expire shortly and are stored only as a secure hash on the server.
+            Enter the six-digit code we emailed to <span className="font-medium text-foreground">{email}</span>. It is
+            valid for 10 minutes. If it has not arrived within a minute, check your spam or promotions folder before
+            resending.
           </p>
         </div>
       </div>
@@ -36,6 +37,13 @@ export default function VerifyCodeStep({ email, code, onCodeChange, onVerify, on
           'Verify and finish'
         )}
       </Button>
+
+      {captcha && (
+        <div className="rounded-2xl border border-border/80 bg-secondary/30 p-4">
+          <p className="mb-3 text-xs text-muted-foreground">Requesting another code needs a quick bot check.</p>
+          {captcha}
+        </div>
+      )}
 
       <div className="flex items-center justify-between text-xs">
         <button type="button" onClick={onBack} className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">

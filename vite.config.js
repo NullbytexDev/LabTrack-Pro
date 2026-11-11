@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, URL } from 'node:url';
+import { defineConfig } from 'vite';
 
-// LabTrack Pro — frontend only.
+// LabTrack Pro — https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   resolve: {

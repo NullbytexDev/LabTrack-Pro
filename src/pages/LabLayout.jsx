@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
-import { api } from '@/api/client';
+import { entities } from '@/api/entities';
 import useProfile from '@/hooks/useProfile';
 import PageTexture from '@/components/common/PageTexture';
 import PageLoader from '@/components/common/PageLoader';
@@ -36,8 +36,8 @@ export default function LabLayout() {
   useEffect(() => {
     let alive = true;
     Promise.all([
-      api.entities.Lab.filter({ status: 'active' }, { sort: 'name', limit: 100 }),
-      api.entities.PC.filter({ lifecycle: 'active' }, { limit: 500 }),
+      entities.Lab.filter({ status: 'active' }, { sort: 'name', limit: 100 }),
+      entities.PC.filter({ lifecycle: 'active' }, { limit: 500 }),
     ])
       .then(([labPage, pcPage]) => {
         if (!alive) return;
@@ -62,7 +62,7 @@ export default function LabLayout() {
     if (!user) return () => { alive = false; };
 
     (async () => {
-      const record = await api.entities.Lab.get(labId).catch((error) => (error.status === 404 ? null : Promise.reject(error)));
+      const record = await entities.Lab.get(labId).catch((error) => (error.status === 404 ? null : Promise.reject(error)));
       if (!alive) return;
       if (!record) {
         setNotFound(true);
@@ -70,7 +70,7 @@ export default function LabLayout() {
         return;
       }
       setLab(record);
-      const pcPage = await api.entities.PC.filter({ lab_id: labId, lifecycle: 'active' }, { sort: 'identifier', limit: 200 });
+      const pcPage = await entities.PC.filter({ lab_id: labId, lifecycle: 'active' }, { sort: 'identifier', limit: 200 });
       if (alive) setPcs(pcPage.items);
     })().catch(() => {
       if (alive) {

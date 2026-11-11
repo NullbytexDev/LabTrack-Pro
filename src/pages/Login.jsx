@@ -7,6 +7,8 @@ import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import PasswordInput from "@/components/account/PasswordInput";
 import GoogleIcon from "@/components/GoogleIcon";
+import SliderCaptchaField from "@/components/auth/SliderCaptchaField";
+import { api } from "@/api/apiClient";
 import { safeReturnTo } from "@/lib/authReturnTo";
 import { loginWithMfa, continueMfa, loginWithGoogle } from '@/lib/authMfa';
 import { startSignInSession } from '@/components/auth/sessionState';
@@ -16,6 +18,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [captchaPass, setCaptchaPass] = useState("");
+  const [captchaRound, setCaptchaRound] = useState(0);
   // Post-login destination (e.g. the MCP OAuth consent page sends users here
   // with returnTo so the grant flow can resume). Same-origin paths only.
   const returnTo = safeReturnTo();
@@ -23,14 +27,29 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    // No password is checked until the bot check is solved.
+    if (!captchaPass) {
+      setError("Complete the “Verify you’re not a bot” check, then log in.");
+      return;
+    }
     setLoading(true);
     try {
+      // The pass is spent here, so every attempt needs a fresh check.
+      const check = await api.functions.invoke("captchaChallenge", {
+        action: "consume",
+        pass: captchaPass,
+        email: email.trim().toLowerCase(),
+      });
+      if (!check?.data?.ok) throw new Error(check?.data?.error || "Complete the bot check again.");
+
       const result = await loginWithMfa(email.trim().toLowerCase(), password);
       if (result?.mfa_required) { await continueMfa(result, returnTo); return; }
       startSignInSession();
       window.location.href = returnTo;
     } catch (err) {
-      setError(err.message || "Invalid email or password");
+      setError(err?.response?.data?.error || err.message || "Invalid email or password");
+      setCaptchaPass("");
+      setCaptchaRound((round) => round + 1);
     } finally {
       setLoading(false);
     }
@@ -51,7 +70,7 @@ export default function Login() {
         <>
           Don't have an account?{" "}
           <Link
-            to={"/register" + (returnTo !== "/" ? "?returnTo=" + encodeURIComponent(returnTo) : "")}
+            to={"/signin" + (returnTo !== "/" ? "?returnTo=" + encodeURIComponent(returnTo) : "")}
             className="text-primary font-medium hover:underline"
           >
             Create one
@@ -121,6 +140,13 @@ export default function Login() {
             />
           </div>
         </div>
+        <SliderCaptchaField
+          key={captchaRound}
+          disabled={loading}
+          email={email.trim().toLowerCase()}
+          onVerified={setCaptchaPass}
+          onReset={() => setCaptchaPass("")}
+        />
         <Button type="submit" className="w-full h-12 font-medium" disabled={loading}>
           {loading ? (
             <>

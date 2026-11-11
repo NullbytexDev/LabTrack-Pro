@@ -4,12 +4,13 @@ import { Label } from '@/components/ui/label';
 import AvatarPicker from '@/components/auth/AvatarPicker';
 import UsageChoice from '@/components/auth/UsageChoice';
 import PasswordInput from '@/components/account/PasswordInput';
+import PasswordStrength from '@/components/account/PasswordStrength';
 import { ROLE_META } from '@/lib/constants';
 import { Mail, Lock, User, Hash, KeyRound } from 'lucide-react';
 
 export const REF_FIELD = { student: 'roll_number', lab_assistant: 'assistant_id', instructor: 'instructor_id' };
 
-function Field({ id, label, hint, icon: Icon, children }) {
+function Field({ id, label, hint, icon: Icon, below, children }) {
   return (
     <div className="space-y-1.5">
       <Label htmlFor={id}>{label}</Label>
@@ -19,6 +20,7 @@ function Field({ id, label, hint, icon: Icon, children }) {
         )}
         {children}
       </div>
+      {below}
       {hint && <p className="text-[11px] leading-relaxed text-muted-foreground">{hint}</p>}
     </div>
   );
@@ -54,7 +56,13 @@ export default function RegisterFields({ role, form, onChange, disabled }) {
       </Field>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field id="password" label="Password" icon={Lock} hint="At least 12 characters, including a number and a symbol.">
+        <Field
+          id="password"
+          label="Password"
+          icon={Lock}
+          hint="At least 12 characters, including a number and a symbol."
+          below={form.password ? <PasswordStrength value={form.password} /> : null}
+        >
           <PasswordInput
             id="password"
             autoComplete="new-password"

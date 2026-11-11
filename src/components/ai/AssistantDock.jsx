@@ -1,7 +1,7 @@
 // Docked LabTrack AI assistant — present on every page for signed-in members
 import React, { useState } from 'react';
 import { Sparkles, X } from 'lucide-react';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import { useAuth } from '@/lib/AuthContext';
 import AssistantThread from '@/components/ai/AssistantThread';
 import AssistantComposer from '@/components/ai/AssistantComposer';

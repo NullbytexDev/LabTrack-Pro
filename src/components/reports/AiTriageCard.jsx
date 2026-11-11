@@ -1,6 +1,6 @@
 // AI triage of unresolved reports — instructors and lab assistants only
 import React, { useState } from 'react';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import { Button } from '@/components/ui/button';
 import AiTriageItem from '@/components/reports/AiTriageItem';
 import { Sparkles, Loader2, RefreshCw } from 'lucide-react';

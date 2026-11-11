@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import { STATUS_META, ROLE_META } from '@/lib/constants';
 import { Inbox } from 'lucide-react';
 

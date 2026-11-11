@@ -1,7 +1,7 @@
 // Reports — students and lab assistants log faults, instructors confirm repairs
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { api } from '@/api/client';
+import { entities } from '@/api/entities';
 import useProfile from '@/hooks/useProfile';
 import PageTexture from '@/components/common/PageTexture';
 import PageLoader from '@/components/common/PageLoader';
@@ -9,6 +9,7 @@ import ReportComposer from '@/components/reports/ReportComposer';
 import StatusReporter from '@/components/reports/StatusReporter';
 import ReportFeed from '@/components/reports/ReportFeed';
 import AiTriageCard from '@/components/reports/AiTriageCard';
+import MaintenanceExportCard from '@/components/reports/MaintenanceExportCard';
 import { STATUS_META, STATUS_ORDER } from '@/lib/constants';
 import { ClipboardList, UserCog } from 'lucide-react';
 
@@ -19,7 +20,7 @@ export default function Reports() {
 
   useEffect(() => {
     let alive = true;
-    api.entities.Lab
+    entities.Lab
       .filter({ status: 'active' }, { sort: 'name', limit: 100 })
       .then((page) => {
         if (alive) setLabs(page.items);
@@ -85,6 +86,7 @@ export default function Reports() {
               ) : (
                 <ReportComposer labs={labs} onSubmitted={bump} />
               )}
+              {isInstructor && <MaintenanceExportCard />}
               {isInstructor && (
                 <div className="surface flex items-start gap-3 p-4">
                   <ClipboardList className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />

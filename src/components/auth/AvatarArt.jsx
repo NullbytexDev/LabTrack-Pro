@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useId } from 'react';
+import AvatarHair from '@/components/auth/AvatarHair';
 
 const PALETTES = [
   { bg: '#EDEBFF', skin: '#F1C7A3', hair: '#241E33', top: '#5B4BF6', trim: '#12B5A5' },
@@ -13,38 +14,22 @@ const PALETTES = [
   { bg: '#E6F2F7', skin: '#B87A50', hair: '#101A2B', top: '#1F6F8B', trim: '#E0982F' },
   { bg: '#F7EAF4', skin: '#F0C6A8', hair: '#3A1F33', top: '#A03C7A', trim: '#12B5A5' },
   { bg: '#EFF1E9', skin: '#8A5A3B', hair: '#1C1A18', top: '#4B5B31', trim: '#C8476B' },
+  { bg: '#EAF0FF', skin: '#6B4229', hair: '#0F0C16', top: '#3C5DBF', trim: '#F2C14E' },
+  { bg: '#FFF1F1', skin: '#FAD9BE', hair: '#7A4B23', top: '#D06A4C', trim: '#2F4B93' },
+  { bg: '#EFFAF7', skin: '#B06B3F', hair: '#1D1520', top: '#2C8E7E', trim: '#E0982F' },
+  { bg: '#F6F1FF', skin: '#E3AE86', hair: '#2A1E3B', top: '#6A3FBF', trim: '#12B5A5' },
+  { bg: '#FDF5E9', skin: '#9B6844', hair: '#16121C', top: '#B98A2E', trim: '#2F7D5B' },
+  { bg: '#E9F4F1', skin: '#F2CBA6', hair: '#4A2C1E', top: '#1E6B62', trim: '#C8476B' },
+  { bg: '#F3F0FB', skin: '#7E4E33', hair: '#120D1A', top: '#4F3A96', trim: '#F2A93B' },
+  { bg: '#FBF3E4', skin: '#F6DCC0', hair: '#8C5B2F', top: '#A77A32', trim: '#1F6F8B' },
+  { bg: '#EAF7EA', skin: '#C2814F', hair: '#1B1518', top: '#3A7A45', trim: '#F2C14E' },
+  { bg: '#FCEFF6', skin: '#A86B45', hair: '#2E1B2C', top: '#B34C8B', trim: '#12B5A5' },
+  { bg: '#EDF3FA', skin: '#EFC1A0', hair: '#232A38', top: '#33527E', trim: '#E0982F' },
+  { bg: '#F8F1E6', skin: '#6E4630', hair: '#100C14', top: '#8A5F2A', trim: '#2F4B93' },
 ];
 
-const HAIR = {
-  bob: (c) => <path d="M30 44c-9 0-15-6-15-14 0-9 7-14 15-14s15 5 15 14c0 8-6 14-15 14Z" fill={c} />,
-  short: (c) => <path d="M31 31c-7 0-11-4-11-10 0-5 5-8 11-8s11 4 11 9-4 9-11 9Z" fill={c} />,
-  curly: (c) => (
-    <g fill={c}>
-      <circle cx="22" cy="20" r="6" />
-      <circle cx="31" cy="15" r="6.5" />
-      <circle cx="40" cy="20" r="6" />
-      <circle cx="31" cy="21" r="6" />
-    </g>
-  ),
-  bun: (c) => (
-    <g fill={c}>
-      <circle cx="31" cy="12" r="5" />
-      <path d="M31 32c-8 0-13-4-13-10s5-9 13-9 13 4 13 9-5 10-13 10Z" />
-    </g>
-  ),
-  long: (c) => (
-    <g fill={c}>
-      <path d="M31 19c-8 0-13 5-13 12v14c2-6 4-9 5-15 1 4 4 6 8 6s7-2 8-6c1 6 3 9 5 15V31c0-7-5-12-13-12Z" />
-      <path d="M18 31c0-9 6-14 13-14s13 5 13 14c0 4-2 7-3 9 0-8-4-12-10-12s-10 4-10 12c-1-2-3-5-3-9Z" />
-    </g>
-  ),
-  fade: (c) => (
-    <g fill={c}>
-      <path d="M20 27c0-8 5-13 11-13s11 5 11 13c-2-3-6-5-11-5s-9 2-11 5Z" />
-      <path d="M20 27h22v3H20Z" opacity="0.75" />
-    </g>
-  ),
-};
+// The original silhouettes intentionally overlap the face with a translucent
+// black layer. Keep that treatment shared by every role and every picker.
 
 /**
  * Original vector illustrations used as role avatars.
@@ -52,25 +37,29 @@ const HAIR = {
  */
 export default function AvatarArt({ role = 'student', id, className = 'h-16 w-16' }) {
   const index = Number(String(id || '').split('-').pop()) || 1;
-  const safeIndex = Math.min(Math.max(index, 1), 12);
+  const safeIndex = Math.min(Math.max(index, 1), AVATAR_COUNT);
   const palette = PALETTES[((ROLE_OFFSET[role] || 0) + safeIndex - 1) % PALETTES.length] || PALETTES[0];
-  const hairStyle = HAIR[HAIR_ORDER[(safeIndex - 1) % HAIR_ORDER.length]];
+  const look = LOOKS[safeIndex - 1];
+  const clipId = `avClip-${useId().replace(/:/g, '')}`;
 
   return (
     <svg viewBox="0 0 64 64" className={className} role="img" aria-label={`${role.replace('_', ' ')} illustration ${safeIndex}`}>
       <defs>
-        <clipPath id={`avClip${role}${safeIndex}`}>
+        <clipPath id={clipId}>
           <circle cx="32" cy="32" r="32" />
         </clipPath>
       </defs>
-      <g clipPath={`url(#avClip${role}${safeIndex})`}>
+      <g clipPath={`url(#${clipId})`}>
         <rect width="64" height="64" fill={palette.bg} />
         <circle cx="32" cy="70" r="26" fill={palette.top} />
         <path d="M18 70c1-12 6-19 14-19s13 7 14 19Z" fill={palette.top} />
         <path d="M26 52h12v6a6 6 0 0 1-12 0Z" fill={palette.skin} />
         <rect x="28" y="46" width="8" height="9" rx="4" fill={palette.skin} />
+
+        <AvatarHair look={look.style} color={palette.hair} />
         <circle cx="32" cy="33" r="13" fill={palette.skin} />
-        {hairStyle(palette.hair)}
+        <AvatarHair look={look.style} color="#000000" opacity={0.22} />
+
         <circle cx="27" cy="34" r="1.6" fill="#1B1526" />
         <circle cx="37" cy="34" r="1.6" fill="#1B1526" />
         <path d="M28.5 40c2 1.6 5 1.6 7 0" stroke="#1B1526" strokeOpacity="0.6" strokeWidth="1.4" strokeLinecap="round" fill="none" />
@@ -97,12 +86,40 @@ export default function AvatarArt({ role = 'student', id, className = 'h-16 w-16
   );
 }
 
-const HAIR_ORDER = ['bob', 'short', 'curly', 'bun', 'long', 'fade', 'curly', 'long', 'bun', 'short', 'bob', 'fade'];
+// Twenty-four looks: exactly twelve female and twelve male, alternating so the
+// grid never clusters either set. Index 1 is the original first illustration.
 const ROLE_OFFSET = { student: 0, lab_assistant: 2, instructor: 4 };
+
+const LOOKS = [
+  { style: 'bob', gender: 'female' },
+  { style: 'short', gender: 'male' },
+  { style: 'long', gender: 'female' },
+  { style: 'fade', gender: 'male' },
+  { style: 'ponytail', gender: 'female' },
+  { style: 'quiff', gender: 'male' },
+  { style: 'bun', gender: 'female' },
+  { style: 'buzz', gender: 'male' },
+  { style: 'wavy', gender: 'female' },
+  { style: 'sidepart', gender: 'male' },
+  { style: 'braids', gender: 'female' },
+  { style: 'twists', gender: 'male' },
+  { style: 'updo', gender: 'female' },
+  { style: 'afro', gender: 'male' },
+  { style: 'curls', gender: 'female' },
+  { style: 'curly', gender: 'male' },
+  { style: 'bob', gender: 'female' },
+  { style: 'short', gender: 'male' },
+  { style: 'long', gender: 'female' },
+  { style: 'quiff', gender: 'male' },
+  { style: 'ponytail', gender: 'female' },
+  { style: 'fade', gender: 'male' },
+  { style: 'bun', gender: 'female' },
+  { style: 'sidepart', gender: 'male' },
+];
 
 const PREFIX = { student: 'st', lab_assistant: 'la', instructor: 'in' };
 
-export const AVATAR_COUNT = 12;
+export const AVATAR_COUNT = 24;
 
 export function avatarOptions(role) {
   return Array.from({ length: AVATAR_COUNT }, (_, i) => ({ id: `${PREFIX[role] || 'st'}-${i + 1}`, index: i + 1 }));

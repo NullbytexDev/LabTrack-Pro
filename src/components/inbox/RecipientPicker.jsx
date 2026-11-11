@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import { Input } from '@/components/ui/input';
 import { ROLE_META } from '@/lib/constants';
 

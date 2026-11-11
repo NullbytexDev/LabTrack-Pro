@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import StatusPill from '@/components/common/StatusPill';
 import { configurationSummary } from '@/components/edit/PcConfigFields';
 import { timeAgo } from '@/lib/format';

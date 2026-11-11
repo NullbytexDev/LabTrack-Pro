@@ -1,6 +1,6 @@
 // AI diagnosis for one computer, from its configuration, notes, reports and history
 import React, { useState } from 'react';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Loader2 } from 'lucide-react';
 

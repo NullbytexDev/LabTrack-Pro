@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import { appParams } from '@/lib/app-params';
 
 const AuthContext = createContext();
@@ -39,8 +39,8 @@ export const AuthProvider = ({ children }) => {
         console.error('App state check failed:', appError);
         
         // Handle app-level errors
-        if (appError.status === 403 && (appError.reason || appError.data?.reason)) {
-          const reason = appError.reason || appError.data?.reason;
+        if (appError.status === 403 && appError.data?.extra_data?.reason) {
+          const reason = appError.data.extra_data.reason;
           if (reason === 'auth_required') {
             setAuthError({
               type: 'auth_required',

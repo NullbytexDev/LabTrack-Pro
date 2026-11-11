@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import { getSessionId, recordSession } from '@/lib/signInSession';
 
 const CHECK_MS = 45000;

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Image } from '@/components/ui/image';
+import { MEDIA_ORIGIN } from '@/components/ui/image-helpers';
 
 // Polished lab artwork used by every lab empty state.
-const LAB_EMPTY_ART = '/lab-illustration.png';
+const LAB_EMPTY_ART = `${MEDIA_ORIGIN}/images/public/87965c868_generated_image.png`;
 
 export default function LabIllustration({ className = 'w-full' }) {
   return (

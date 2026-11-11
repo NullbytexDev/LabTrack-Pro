@@ -13,6 +13,7 @@ import SignInConfirmation from '@/components/auth/SignInConfirmation';
 import StudentValidityNotice from '@/components/account/StudentValidityNotice';
 import UsageStatisticsPrompt from '@/components/account/UsageStatisticsPrompt';
 import TwoFactorGate from '@/components/auth/TwoFactorGate';
+import ProfileSetupGate from '@/components/auth/ProfileSetupGate';
 import AssistantDock from '@/components/ai/AssistantDock';
 
 export default function AppShell() {
@@ -33,9 +34,11 @@ export default function AppShell() {
       <PendingAccountMove user={user} />
       <main id="main-content" className="min-h-[70vh] flex-1 isolate">
         <TwoFactorGate>
-          <PageTransition pageKey={location.pathname}>
-            <Outlet />
-          </PageTransition>
+          <ProfileSetupGate>
+            <PageTransition pageKey={location.pathname}>
+              <Outlet />
+            </PageTransition>
+          </ProfileSetupGate>
           <SignInConfirmation />
           {user?.id ? <StudentValidityNotice /> : null}
           {user?.id ? <UsageStatisticsPrompt /> : null}

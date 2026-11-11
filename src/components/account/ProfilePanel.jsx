@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { api } from '@/api/client';
+import { api } from '@/api/apiClient';
 import AvatarPicker from '@/components/auth/AvatarPicker';
 import PasswordInput from '@/components/account/PasswordInput';
 import { Button } from '@/components/ui/button';
