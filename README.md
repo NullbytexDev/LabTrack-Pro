@@ -60,4 +60,4 @@ is expected for this snapshot.
 
 Built by Nullbytex and Tanbihul Asrar.
 
-© 2026 LabTrack Pro · FCI. All rights reserved.
+© 2026 LabTrack Pro · FCI · All rights reserved.
